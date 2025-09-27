@@ -1,0 +1,270 @@
+openapi: 3.0.0
+info:
+  title: Store API
+  version: 1.0.0
+  description: API documentation for my store app
+
+servers:
+  - url: http://localhost:9000
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: MongoDB ObjectId
+          example: 64afc9e2a7a9f2d7c5a7b123
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john@example.com
+        address:
+          type: string
+          example: "123 Main St, New York"
+        phone:
+          type: string
+          example: "+1-555-1234"
+        password:
+          type: string
+          format: password
+          example: "secret123"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - name
+        - email
+        - password
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          description: MongoDB ObjectId
+          example: 64afc9e2a7a9f2d7c5a7b456
+        name:
+          type: string
+          example: "Sample Product"
+        description:
+          type: string
+          example: "This is a sample product."
+        price:
+          type: number
+          format: float
+          example: 19.99
+        category:
+          type: string
+          example: "Electronics"
+        stock:
+          type: integer
+          example: 100
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - name
+        - price
+        - stock
+  securitySchemes:
+      BearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+    put:
+      tags:
+        - Users
+      summary: Update a user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - Users
+      summary: Delete a user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted
+  
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Get all products
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Get a product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product ID
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+
+    put:
+      tags:
+        - Products
+      summary: Update a product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Updated product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+    delete:
+      tags:
+        - Products
+      summary: Delete a product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product deleted
